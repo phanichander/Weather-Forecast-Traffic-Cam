@@ -1,0 +1,120 @@
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.ant-picker-ok .ant-btn {
+  color: #1677ff;
+}
+
+.ant-picker {
+  height: 40px;
+  width: 200px;
+}
+
+.ant-select .ant-select-selector {
+  align-items: center;
+  height: 40px !important;
+}
+
+.traffic-image {
+  height: 240px;
+}
+
+.card_banner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: var(--radius-s);
+  padding: var(--gap-s);
+}
+
+.card {
+  background-color: #000;
+  color: #303030;
+  height: 100%;
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 2px #aaa;
+  font-weight: 400;
+} 
+
+.icon {
+  background-color: #ffffff;
+  font-size: 36px;
+  border-radius: 50%;
+  margin-right: 24px;
+}
+
+.icon i {
+  font-size: 32px;
+  padding: 12px;
+}
+
+.icon .wi-night-clear {
+  color: #ffffff;
+}
+
+.icon .wi-day-sunny {
+  color: #f9d71c;
+}
+
+.icon .wi-cloudy-windy {
+  color: sandybrown;
+}
+
+.icon .wi-day-cloudy {
+  color: #3498db;
+}
+
+.icon .wi-day-sunny-overcast {
+  color: orange;
+}
+
+.desc-day {
+  background-color: #f9d71c;
+}
+
+.desc-night {
+  background-color: skyblue;
+}
+
+.desc-windy {
+  background-color: sandybrown;
+}
+
+.desc-day-cloudy {
+  background-color: #3498db;
+}
+
+.desc-fair-warm {
+  background-color: orange;
+}
+
+.card_desc {
+  font-size: 16px;
+  color: white;
+  font-weight: 400;
+}
+
+/* responsive */
+@media only screen and (max-width: 768px) {
+  .timer {
+    width: 100%;
+    margin-top: 24px;
+  }
+
+  .date-picker {
+    width: 100%;
+  }
+}
