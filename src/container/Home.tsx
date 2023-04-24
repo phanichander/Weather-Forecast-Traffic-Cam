@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Card } from 'antd'
 import dayjs from 'dayjs';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 
 import DatePicker from '../components/DatePicker';
 import TimePicker from '../components/TimePicker';
@@ -11,6 +11,7 @@ import { Weather } from '../components/Weather';
 import { getClosestGeoLocations } from '../utils';
 import { PAGE_TITLE } from '../constants/displayMessage';
 import { getApiRequest } from '../api';
+import { cameraDetails, locationDetails } from '../constants/types';
 
 function Home() {
   const [initialState, setInitialState] = useState({
@@ -22,7 +23,8 @@ function Home() {
     locationDetails: {
       name: "",
       area: "",
-      forecast: ""
+      forecast: "",
+      location: { latitude: 0, longitude: 0 }
     },
     trafficImageDetails: {
       image: ""
@@ -37,11 +39,13 @@ function Home() {
 
   const loadData = async () => {
     const TRAFFIC_IMAGES_API = `transport/traffic-images?date_time=${dayjs(`${initialState.date} ${initialState.time}`).format('YYYY-MM-DDTHH:mm:ss')}`
-    const response: any = await getApiRequest(TRAFFIC_IMAGES_API);
-    let geoLocationsList: any[] = []; 
-    response.data.items[0].cameras.forEach((item: any) => {
-      geoLocationsList.push(item.location)
+    const response: any  = await getApiRequest(TRAFFIC_IMAGES_API);
+    let geoLocationsList: locationDetails[] = []; 
+
+    response.data.items[0].cameras.forEach((camera: any) => {
+      geoLocationsList.push(camera.location)
     });
+
     callWeatherAPI();
     setInitialState((prevState: any) => {
       return {
@@ -61,7 +65,7 @@ function Home() {
   const wheatherState = (response: AxiosResponse<any, any>) => {
     let results: any = [];
   
-    response.data.items.forEach((item: { forecasts?: any; }) => {
+    response.data.items.forEach((item: { forecasts: any[] }) => {
       if (Object.keys(item).length > 0) {
         item.forecasts.forEach((forecast: any) => {
           response.data.area_metadata.forEach((meta: any) => {
@@ -84,17 +88,15 @@ function Home() {
           }
         });
       } else {
-          setInitialState((prevState: any) => {
-            return {
-              ...prevState,
-              locations: []
-            }
+          setInitialState({
+            ...initialState,
+            locations: []
           });
       }
     });
   }
 
-  const handleOnChange = (value: any, fieldName: any) => {
+  const handleOnChange = (value: string, fieldName: string) => {
     setInitialState({
       ...initialState,
       [fieldName] : value,
@@ -104,19 +106,19 @@ function Home() {
       locationDetails: {
         name: "",
         area: "",
-        forecast: ""
+        forecast: "",
+        location: { latitude: 0, longitude: 0 }
       },
       trafficImageDetails: {
-        image: ""
+        image: "",
+
       }
     });
-    
   }
 
-  const handleLocationClick = (selectedLocation: any) => {
-    let imageDetails: any = '';
+  const handleLocationClick = (selectedLocation: locationDetails) => { 
     const nearestLocation = getClosestGeoLocations(initialState.geoLocations, selectedLocation.location);
-    imageDetails = initialState.cameras.find((item: any) => item.location.latitude === nearestLocation.latitude && item.location.longitude === nearestLocation.longitude);
+    const imageDetails: cameraDetails | undefined = initialState.cameras.find((item: cameraDetails) => item.location.latitude === nearestLocation.latitude && item.location.longitude === nearestLocation.longitude);
 
     setInitialState((prevState: any) => {
       return {

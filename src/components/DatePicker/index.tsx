@@ -5,11 +5,11 @@ import { WeatherFields } from "../../constants/displayFields";
 
 interface Props {
   value: string;
-  onChange: any;
+  onChange: (value: string, fieldName: string) => void;
 }
 
 const DatePicker = ({ value, onChange }: Props) => {
-  const handleOnChange = (date: any, dateString: any) =>{
+  const handleOnChange = (date: any, dateString: string) =>{
     onChange(dateString, WeatherFields.DATE)
   }
 

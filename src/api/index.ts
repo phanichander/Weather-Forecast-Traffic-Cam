@@ -9,10 +9,10 @@ export const getApiRequest = (path: string) => {
     return axios({
       method:'get',
       url: DATA_GOV_SG_API.concat(path)
-    }).then((response: any) => {
+    }).then((response) => {
       resolve(response);
     })
-    .catch((error: { response: any; }) => {
+    .catch(error => {
       console.error(error)
       reject(error.response);
     });

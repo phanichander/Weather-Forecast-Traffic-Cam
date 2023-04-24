@@ -1,9 +1,8 @@
-import { Card } from "antd";
 import { WeatherIcons, WeatherTypes } from "../../constants/displayFields";
-import { locationsDetails } from "../../constants/types";
+import { locationDetails } from "../../constants/types";
 
 interface Props {
-  locationDetails: locationsDetails;
+  locationDetails: locationDetails;
 }
 
 export const Weather = ({ locationDetails }: Props) => {
@@ -46,6 +45,7 @@ export const Weather = ({ locationDetails }: Props) => {
       <div className="icon">
         <i className={icon} />
       </div>
+      
       <div className="card_desc">
         <p> {!forecast ? 'Forecast not found' : forecast} </p>
         <p> {!name ? 'Area name not found' : name} </p>

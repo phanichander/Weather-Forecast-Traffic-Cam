@@ -1,8 +1,4 @@
-
-
-import React from 'react';
 import { TimePicker as Time } from 'antd';
-import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { WeatherFields } from '../../constants/displayFields';
@@ -11,7 +7,7 @@ dayjs.extend(customParseFormat);
 
 interface Props { 
   value: string;
-  onChange: any;
+  onChange: (value: string, fieldName: string) => void;
 }
 
 const TimePicker = ({value, onChange } : Props) => {
