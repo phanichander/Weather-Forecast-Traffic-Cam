@@ -19,18 +19,11 @@ const Location = ({ locations, onLocationClick}:Props) => {
     }
   }
 
-  // <Option value="korea" label="Korea">
-  //     <Space>
-  //       <span role="img" aria-label="Korea">
-  //         🇰🇷
-  //       </span>
-  //       Korea
-  //     </Space>
-  //   </Option>
   return (      
     <Select
       className="location-details w-full"
       allowClear
+      showSearch
       placeholder={SELECT_LOCATION}
       onChange={handleChange}
       options={selectOptions}

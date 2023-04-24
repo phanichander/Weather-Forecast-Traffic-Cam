@@ -137,7 +137,7 @@ function Home() {
       </section>
 
       <section className='mb-6'>  
-        {locations.length && <Location locations={locations} onLocationClick={handleLocationClick} /> }
+        {Boolean(locations.length) && <Location locations={locations} onLocationClick={handleLocationClick} /> }
         {locationDetails.name && <Weather locationDetails={locationDetails} /> }
       </section>
       
