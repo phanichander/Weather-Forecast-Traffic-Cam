@@ -9,8 +9,8 @@ interface Props {
 }
 
 const DatePicker = ({ value, onChange }: Props) => {
-  const handleOnChange = (date: any, dateString: string) =>{
-    onChange(dateString, WeatherFields.DATE)
+  const handleOnChange = (date: dayjs.Dayjs | null) =>{
+    onChange(dayjs(date).format('YYYY-MM-DD'), WeatherFields.DATE)
   }
 
   return <Date

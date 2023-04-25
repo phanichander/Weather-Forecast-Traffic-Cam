@@ -1,146 +1,132 @@
 import { useEffect, useState } from 'react'
 import { Card } from 'antd'
 import dayjs from 'dayjs';
-import { AxiosResponse } from 'axios';
 
 import DatePicker from '../components/DatePicker';
 import TimePicker from '../components/TimePicker';
 import Image from '../components/Image';
 import Location from '../components/Location';
 import { Weather } from '../components/Weather';
-import { getClosestGeoLocations } from '../utils';
+import { getClosestGeoLocations, getLocationList } from '../utils';
 import { PAGE_TITLE } from '../constants/displayMessage';
 import { getApiRequest } from '../api';
-import { cameraDetails, locationDetails } from '../constants/types';
+import { cameraDetails as cameraDetailsType, locationDetails } from '../constants/types';
 
 function Home() {
-  const [initialState, setInitialState] = useState({
+  const [dateTimeState, setDateTimeState] = useState({
     date: dayjs(new Date('2021-03-20')).format('YYYY-MM-DD'),
     time: dayjs("09:10:00", "HH:mm:ss").format('HH:mm:ss'),
-    locations: [],
+  });
+
+  const [trafficState, setTrafficState] = useState({
     cameras: [],
-    geoLocations: [], // List of location from cameras
-    locationDetails: {
+    geoLocations: [] // List of location from cameras
+  });
+
+  const [weatherState, setWeatherState] = useState({
+    locations: [],
+    trafficImageDetails: {
+      image: ""
+    },
+    selectedLocationDetails: {
       name: "",
       area: "",
       forecast: "",
       location: { latitude: 0, longitude: 0 }
     },
-    trafficImageDetails: {
-      image: ""
-    }
   });
 
   useEffect(() => {
-    if (initialState.date && initialState.time) {
-      loadData();
+    if (dateTimeState.date && dateTimeState.time) {
+      callTrafficAPI();
+      callWeatherAPI();
     }
-  }, [initialState.date, initialState.time])
+  }, [dateTimeState.date, dateTimeState.time])
 
-  const loadData = async () => {
-    const TRAFFIC_IMAGES_API = `transport/traffic-images?date_time=${dayjs(`${initialState.date} ${initialState.time}`).format('YYYY-MM-DDTHH:mm:ss')}`
+  const callTrafficAPI = async () => {
+    const TRAFFIC_IMAGES_API = `transport/traffic-images?date_time=${dayjs(`${dateTimeState.date} ${dateTimeState.time}`).format('YYYY-MM-DDTHH:mm:ss')}`
     const response: any  = await getApiRequest(TRAFFIC_IMAGES_API);
-    let geoLocationsList: locationDetails[] = []; 
+    const cameraDetails = response.data.items[0].cameras;
+    let geoLocationsList: any = []; 
 
-    response.data.items[0].cameras.forEach((camera: any) => {
+    cameraDetails.map((camera: any) => {
       geoLocationsList.push(camera.location)
     });
 
-    callWeatherAPI();
-    setInitialState((prevState: any) => {
-      return {
-        ...prevState,
-        cameras: response.data.items[0].cameras,
-        geoLocations: geoLocationsList
-      }
+    setTrafficState({
+      cameras: cameraDetails,
+      geoLocations: geoLocationsList
     });
   }
 
   const callWeatherAPI = async () => {
-    const WEATHER_API = `environment/2-hour-weather-forecast?date_time=${dayjs(`${initialState.date} ${initialState.time}`).format('YYYY-MM-DDTHH:mm:ss')}`;
-    const response: any = await getApiRequest(WEATHER_API)
-    wheatherState(response);
+    const WEATHER_API = `environment/2-hour-weather-forecast?date_time=${dayjs(`${dateTimeState.date} ${dateTimeState.time}`).format('YYYY-MM-DDTHH:mm:ss')}`;
+    const locationList: any = await getLocationList(await getApiRequest(WEATHER_API));
+     
+    if (Boolean(locationList.length)) {
+      setWeatherState({
+        ...weatherState, 
+        locations: locationList 
+      });
+    } else {
+      setWeatherState({
+        ...weatherState,
+        locations: []
+      });
+    }
   }
 
-  const wheatherState = (response: AxiosResponse<any, any>) => {
-    let results: any = [];
-  
-    response.data.items.forEach((item: { forecasts: any[] }) => {
-      if (Object.keys(item).length > 0) {
-        item.forecasts.forEach((forecast: any) => {
-          response.data.area_metadata.forEach((meta: any) => {
-            if (forecast.area === meta.name) {
-              let result = {
-                  name: meta.name,
-                  area: forecast.area,
-                  forecast: forecast.forecast,
-                  location: meta.label_location
-              }
-              results.push(result);
-            } 
-          });
-        });
-
-        setInitialState((prevState: any) => {
-          return {
-            ...prevState, 
-            locations: results 
-          }
-        });
-      } else {
-          setInitialState({
-            ...initialState,
-            locations: []
-          });
-      }
+  const handleDateTimeChange = (value: string, fieldName: string) => {
+    setDateTimeState({
+      ...dateTimeState,
+      [fieldName] : value
     });
-  }
 
-  const handleOnChange = (value: string, fieldName: string) => {
-    setInitialState({
-      ...initialState,
-      [fieldName] : value,
-      locations: [],
+    setTrafficState({
       cameras: [],
-      geoLocations: [],
-      locationDetails: {
+      geoLocations: []
+    });
+
+    setWeatherState({
+      locations: [],
+      trafficImageDetails: {
+        image: ""
+      },
+      selectedLocationDetails: {
         name: "",
         area: "",
         forecast: "",
         location: { latitude: 0, longitude: 0 }
-      },
-      trafficImageDetails: {
-        image: "",
-
       }
     });
   }
 
   const handleLocationClick = (selectedLocation: locationDetails) => { 
-    const nearestLocation = getClosestGeoLocations(initialState.geoLocations, selectedLocation.location);
-    const imageDetails: cameraDetails | undefined = initialState.cameras.find((item: cameraDetails) => item.location.latitude === nearestLocation.latitude && item.location.longitude === nearestLocation.longitude);
+    const nearestLocation = getClosestGeoLocations(trafficState.geoLocations, selectedLocation.location);
+    const imageDetails: cameraDetailsType | undefined = trafficState.cameras.find((item: cameraDetailsType) => item.location.latitude === nearestLocation.latitude && item.location.longitude === nearestLocation.longitude);
 
-    setInitialState((prevState: any) => {
+    setWeatherState((prevState: any) => {
       return {
         ...prevState,
-        locationDetails: selectedLocation,
+        selectedLocationDetails: selectedLocation,
         trafficImageDetails: imageDetails
       }
     })
   }
 
-  const { locations, locationDetails, trafficImageDetails, date, time } = initialState;
+  const { date, time } = dateTimeState;
+  const { locations, selectedLocationDetails, trafficImageDetails } = weatherState;
 
   return (
     <Card title={PAGE_TITLE}>
       <section className='mb-6'>       
-        <DatePicker value={date} onChange={handleOnChange} />
-        <TimePicker value={time} onChange={handleOnChange} />
+        <DatePicker value={date} onChange={handleDateTimeChange} />
+        <TimePicker value={time} onChange={handleDateTimeChange} />
       </section>
 
       <section className='mb-6'>  
         {Boolean(locations.length) && <Location locations={locations} onLocationClick={handleLocationClick} /> }
-        {locationDetails.name && <Weather locationDetails={locationDetails} /> }
+        {selectedLocationDetails.name && <Weather locationDetails={selectedLocationDetails} /> }
       </section>
       
       {
