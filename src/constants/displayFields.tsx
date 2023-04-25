@@ -19,3 +19,11 @@ export enum WeatherIcons {
   DAY_CLOUDY = "wi wi-day-cloudy",
   SUNNY_OVERCAST = "wi wi-day-sunny-overcast"
 }
+
+export enum WeatherColors {
+  DAY = "day",
+  NIGHT = "night",
+  WINDY = "windy",
+  DAY_CLOUDY = "day_cloudy",
+  FAIR_WARM = "fair_warm"
+}

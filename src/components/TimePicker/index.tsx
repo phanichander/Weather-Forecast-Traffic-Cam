@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import { WeatherFields } from '../../constants/displayFields';
+import { DATE_TIME_TYPE } from '../../constants/types';
 
 dayjs.extend(customParseFormat);
 
@@ -17,7 +18,7 @@ const TimePicker = ({value, onChange } : Props) => {
   };
 
   return <Time
-    defaultValue={dayjs(value, 'HH:mm:ss')}
+    defaultValue={dayjs(value, DATE_TIME_TYPE.TIME_FORMAT)}
     className='timer'
     onChange={handleChange}
   />

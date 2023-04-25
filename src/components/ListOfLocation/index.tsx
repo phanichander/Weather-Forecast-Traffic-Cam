@@ -9,7 +9,7 @@ interface Props {
   onLocationClick: (location: locationDetails) => void
 }
 
-const Location = ({ locations, onLocationClick } : Props) => {  
+export const ListOfLocation = ({ locations, onLocationClick } : Props) => {  
   const selectOptions = useMemo(() => {
     return locations.map((location: locationDetails) => ({...location, label: location.name, value: location.name.replace(/\s/g, '')}));
   }, [locations]);
@@ -34,6 +34,4 @@ const Location = ({ locations, onLocationClick } : Props) => {
       options={selectOptions}
     />
   );
-}
-
-export default Location;
+};

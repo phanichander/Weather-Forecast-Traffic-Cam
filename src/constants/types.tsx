@@ -14,3 +14,9 @@ export type cameraDetails = {
   location: { latitude: number, longitude: number },
   timestamp: string
 }
+
+export const DATE_TIME_TYPE = {
+  DATE_FORMAT: "YYYY-MM-DD",
+  TIME_FORMAT: "HH:mm:ss",
+  DATE_TIME_FORMAT: "YYYY-MM-DDTHH:mm:ss"
+}

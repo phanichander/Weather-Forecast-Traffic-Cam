@@ -31,7 +31,7 @@
   height: 240px;
 }
 
-.card_banner {
+.weather_banner {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -39,18 +39,8 @@
   padding: var(--gap-s);
 }
 
-.card {
-  background-color: #000;
-  color: #303030;
-  height: 100%;
-  border-radius: 0;
-  border: none;
-  box-shadow: 0 0 2px #aaa;
-  font-weight: 400;
-} 
-
 .icon {
-  background-color: #ffffff;
+  background-color: white;
   font-size: 36px;
   border-radius: 50%;
   margin-right: 24px;
@@ -62,46 +52,46 @@
 }
 
 .icon .wi-night-clear {
-  color: #ffffff;
+  color: white;
 }
 
 .icon .wi-day-sunny {
-  color: #f9d71c;
+  color: #dbc650;
 }
 
 .icon .wi-cloudy-windy {
-  color: sandybrown;
+  color: rgb(199, 138, 84);
 }
 
 .icon .wi-day-cloudy {
-  color: #3498db;
+  color: #449cd6;
 }
 
 .icon .wi-day-sunny-overcast {
-  color: orange;
+  color: rgb(204, 167, 98);
 }
 
-.desc-day {
+.day {
   background-color: #f9d71c;
 }
 
-.desc-night {
+.night {
   background-color: skyblue;
 }
 
-.desc-windy {
+.windy {
   background-color: sandybrown;
 }
 
-.desc-day-cloudy {
+.day_cloudy {
   background-color: #3498db;
 }
 
-.desc-fair-warm {
+.fair_warm {
   background-color: orange;
 }
 
-.card_desc {
+.weather_desc {
   font-size: 16px;
   color: white;
   font-weight: 400;
