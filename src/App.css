@@ -71,6 +71,14 @@
   color: rgb(204, 167, 98);
 }
 
+.icon .wi-cloudy {
+  color: rgb(171, 219, 231);;
+}
+
+.icon .wi-night-showers {
+  color: rgb(105, 104, 101);
+}
+
 .day {
   background-color: #f9d71c;
 }
@@ -89,6 +97,14 @@
 
 .fair_warm {
   background-color: orange;
+}
+
+.thunder {
+  background-color: rgb(105, 104, 101);
+}
+
+.cloudy {
+  background-color: rgb(171, 219, 231);
 }
 
 .weather_desc {

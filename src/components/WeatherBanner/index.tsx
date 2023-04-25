@@ -33,6 +33,16 @@ export const WeatherBanner = ({ locationDetails }: Props) => {
         color = WeatherColors.FAIR_WARM;
       break;
 
+      case WeatherTypes.CLOUDY:
+        icon = WeatherIcons.CLOUDY;
+        color = WeatherColors.CLOUDY;
+      break;
+
+      case WeatherTypes.THUNDERY_SHOWERS:
+        icon = WeatherIcons.THUNDER;
+        color = WeatherColors.THUNDER;
+      break;
+
       case WeatherTypes.FAIR_DAY:
       default:
           icon = WeatherIcons.DAY_SUNNY;
