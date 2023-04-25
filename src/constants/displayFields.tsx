@@ -6,10 +6,10 @@ export enum WeatherFields {
 
 export enum WeatherTypes {
   FAIR_NIGHT = "Fair (Night)",
-  FAIR_DAY ="Fair (Day)",
-  WINDY ="Windy",
-  PARTLY_CLOUDY_DAY="Partly Cloudy (Day)",
-  FAIR_AND_WARM="Fair & Warm"
+  FAIR_DAY = "Fair (Day)",
+  WINDY = "Windy",
+  PARTLY_CLOUDY_DAY = "Partly Cloudy (Day)",
+  FAIR_AND_WARM = "Fair & Warm"
 }
 
 export enum WeatherIcons {

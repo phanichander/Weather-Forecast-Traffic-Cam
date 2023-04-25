@@ -10,20 +10,10 @@ export const getLocationList = (response: any ) => {
   const { items, area_metadata } = response.data;
   let locationList: any = [];
 
-  items.map((item: { forecasts: any[] }) => {
+  items.map((item: any) => {
     item.forecasts.map((forecast: any) => {
-      area_metadata.map((meta: any) => {
-        if (forecast.area === meta.name) {
-          let result = {
-            name: meta.name,
-            area: forecast.area,
-            forecast: forecast.forecast,
-            location: meta.label_location
-          }
-
-          locationList.push(result);
-        }
-      });
+      const { name, label_location: location } = area_metadata.find((area: { name: string }) => area.name === forecast.area);
+      locationList.push({ ...forecast, name, location });
     });
   });
 
