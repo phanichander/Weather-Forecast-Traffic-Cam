@@ -1,24 +1,29 @@
 import { Select } from 'antd';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { SELECT_LOCATION } from '../../constants/displayMessage';
 import { locationDetails } from '../../constants/types';
+import { truncateSpace } from '../../utils';
 
 interface Props {
+  showValue: boolean;
   locations: locationDetails[];
   onLocationClick: (location: locationDetails) => void
 }
 
-export const ListOfLocation = ({ locations, onLocationClick } : Props) => {  
+export const ListOfLocation = ({ showValue, locations, onLocationClick } : Props) => {  
+  const [value, setValue] = useState("");
+
   const selectOptions = useMemo(() => {
-    return locations.map((location: locationDetails) => ({...location, label: location.name, value: location.name.replace(/\s/g, '')}));
+    return locations.map((location: locationDetails) => ({...location, label: location.name, value: truncateSpace(location.name)}));
   }, [locations]);
 
   const handleChange = (value: string) => {
     if (value) {
-      const selectedLocation = locations.find((location: locationDetails) => location.name.replace(/\s/g, '') === value); 
+      const selectedLocation = locations.find((location: locationDetails) => truncateSpace(location.name) === value); 
       
       if (selectedLocation) {
+        setValue(value)
         onLocationClick(selectedLocation);
       }
     }
@@ -26,6 +31,7 @@ export const ListOfLocation = ({ locations, onLocationClick } : Props) => {
 
   return (      
     <Select
+      value={showValue ? value : ""}
       className="location-details w-full"
       allowClear
       showSearch

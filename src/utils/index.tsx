@@ -20,3 +20,4 @@ export const getLocationList = (response: any ) => {
   return locationList;
 };
 
+export const truncateSpace = (value: string) => value.replace(/\s/g, '');

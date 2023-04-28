@@ -37,7 +37,9 @@ function Home() {
   useEffect(() => {
     if (dateTimeState.date && dateTimeState.time) {
       callTrafficAPI();
-      callWeatherAPI();
+      if (!Boolean(weatherState.locations.length)) {
+        callWeatherAPI();
+      }
     }
   }, [dateTimeState.date, dateTimeState.time])
 
@@ -66,11 +68,6 @@ function Home() {
         ...weatherState, 
         locations: locationList 
       });
-    } else {
-      setWeatherState({
-        ...weatherState,
-        locations: []
-      });
     }
   }
 
@@ -86,7 +83,7 @@ function Home() {
     });
 
     setWeatherState({
-      locations: [],
+      ...weatherState,
       trafficImageDetails: {
         image: ""
       },
@@ -115,7 +112,8 @@ function Home() {
 
   const { date, time } = dateTimeState;
   const { locations, selectedLocationDetails, trafficImageDetails } = weatherState;
-
+  const { name } = selectedLocationDetails;
+ 
   return (
     <Card title={PAGE_TITLE}>
       <section className='mb-6'>       
@@ -124,8 +122,8 @@ function Home() {
       </section>
 
       <section className='mb-6'>  
-        {Boolean(locations.length) && <ListOfLocation locations={locations} onLocationClick={handleLocationClick} /> }
-        {selectedLocationDetails.name && <WeatherBanner locationDetails={selectedLocationDetails} /> }
+        {Boolean(locations.length) && <ListOfLocation showValue={Boolean(name)} locations={locations} onLocationClick={handleLocationClick} /> }
+        {Boolean(name) && <WeatherBanner locationDetails={selectedLocationDetails} /> }
       </section>
       
       {
