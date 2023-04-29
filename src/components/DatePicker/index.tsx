@@ -19,6 +19,7 @@ const DatePicker = ({ value, onChange }: Props) => {
     format={DATE_TIME_TYPE.DATE_FORMAT}
     defaultValue={dayjs(value, DATE_TIME_TYPE.DATE_FORMAT)}
     onChange={handleOnChange}
+    status={value === "Invalid Date"  ? "error" : ""}
   />
 }
 

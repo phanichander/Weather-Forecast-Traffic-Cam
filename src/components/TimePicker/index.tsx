@@ -22,6 +22,7 @@ const TimePicker = ({value, onChange } : Props) => {
       defaultValue={dayjs(value, DATE_TIME_TYPE.TIME_FORMAT)}
       className='timer-picker'
       onChange={handleChange}
+      status={!Boolean(value) ? "error" : ""}
     />
   );
 };

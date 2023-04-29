@@ -118,17 +118,21 @@ function Home() {
         <DatePicker value={date} onChange={handleDateTimeChange} />
         <TimePicker value={time} onChange={handleDateTimeChange} />
       </section>
-
-      <section className='mb-6'>  
-        {Boolean(locations.length) && <ListOfLocation showValue={Boolean(name)} locations={locations} onLocationClick={handleLocationClick} /> }
-        {Boolean(name) && <WeatherBanner locationDetails={selectedLocationDetails} /> }
-      </section>
       
-      {
-        trafficImageDetails.image &&
-          <section className='text-center'>
-            <Image source={trafficImageDetails.image} />
+      {(Boolean(date !== "Invalid Date") && Boolean(time)) &&
+        <>
+          <section className='mb-6'>
+            {Boolean(locations.length) && <ListOfLocation showValue={Boolean(name)} locations={locations} onLocationClick={handleLocationClick} /> }
+            {Boolean(name) && <WeatherBanner locationDetails={selectedLocationDetails} /> }
           </section>
+          
+          {
+            trafficImageDetails.image &&
+              <section className='text-center'>
+                <Image source={trafficImageDetails.image} />
+              </section>
+          }
+        </>
       }
     </Card>
   )
