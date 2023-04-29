@@ -31,15 +31,13 @@ function Home() {
       area: "",
       forecast: "",
       location: { latitude: 0, longitude: 0 }
-    },
+    }
   });
 
   useEffect(() => {
     if (dateTimeState.date && dateTimeState.time) {
       callTrafficAPI();
-      if (!Boolean(weatherState.locations.length)) {
-        callWeatherAPI();
-      }
+      callWeatherAPI();
     }
   }, [dateTimeState.date, dateTimeState.time])
 

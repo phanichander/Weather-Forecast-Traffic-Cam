@@ -17,11 +17,13 @@ const TimePicker = ({value, onChange } : Props) => {
     onChange(timeString, WeatherFields.TIME )
   };
 
-  return <Time
-    defaultValue={dayjs(value, DATE_TIME_TYPE.TIME_FORMAT)}
-    className='timer'
-    onChange={handleChange}
-  />
+  return (
+    <Time
+      defaultValue={dayjs(value, DATE_TIME_TYPE.TIME_FORMAT)}
+      className='timer-picker'
+      onChange={handleChange}
+    />
+  );
 };
 
 export default TimePicker;
