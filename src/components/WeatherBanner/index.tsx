@@ -1,5 +1,4 @@
 import { WeatherColors, WeatherIcons, WeatherTypes } from "../../constants/displayFields";
-import { AREA_NAME_NOT_FOUND, FORECAST_NOT_FOUND } from "../../constants/displayMessage";
 import { locationDetails } from "../../constants/types";
 
 interface Props {
@@ -57,8 +56,8 @@ export const WeatherBanner = ({ locationDetails }: Props) => {
       </div>
       
       <div className="weather_desc">
-        <p> {!forecast ? FORECAST_NOT_FOUND : forecast} </p>
-        <p> {!name ? AREA_NAME_NOT_FOUND : name} </p>
+        <p> {forecast} </p>
+        <p> {name} </p>
       </div>
     </div>
   )
