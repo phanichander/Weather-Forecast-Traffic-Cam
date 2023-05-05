@@ -9,13 +9,15 @@ export const getClosestGeoLocations = (geoLocations:any , selectedGeoLocation: a
 export const getLocationList = (response: any ) => {
   const { items, area_metadata } = response.data;
   let locationList: any = [];
-
-  items.map((item: any) => {
-    item.forecasts.map((forecast: any) => {
-      const { name, label_location: location } = area_metadata.find((area: { name: string }) => area.name === forecast.area);
-      locationList.push({ ...forecast, name, location });
+  
+  if (Boolean(items.length)) {
+    items.map((item: any) => {
+      item.forecasts.map((forecast: any) => {
+        const { name, label_location: location } = area_metadata.find((area: { name: string }) => area.name === forecast.area);
+        locationList.push({ ...forecast, name, location });
+      });
     });
-  });
+  }
 
   return locationList;
 };

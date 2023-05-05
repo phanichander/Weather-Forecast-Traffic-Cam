@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useReducer, useState } from 'react'
 import { Card } from 'antd'
 import dayjs from 'dayjs';
 
@@ -8,15 +8,21 @@ import Image from '../components/Image';
 import { ListOfLocation } from '../components/ListOfLocation';
 import { WeatherBanner } from '../components/WeatherBanner';
 import { getClosestGeoLocations, getLocationList } from '../utils';
-import { PAGE_TITLE } from '../constants/displayMessage';
+import { INVALID_DATE, PAGE_TITLE } from '../constants/displayMessage';
 import { getApiRequest } from '../api';
 import { DATE_TIME_TYPE, cameraDetails as cameraDetailsType, locationDetails } from '../constants/types';
+import { dateTimeReducer } from '../reducer';
 
 function Home() {
-  const [dateTimeState, setDateTimeState] = useState({
+  const [dateTimeState, dispatch] = useReducer(dateTimeReducer, {
     date: dayjs(new Date('2021-03-20')).format(DATE_TIME_TYPE.DATE_FORMAT),
     time: dayjs("09:10:00", DATE_TIME_TYPE.TIME_FORMAT).format(DATE_TIME_TYPE.TIME_FORMAT),
   });
+
+  // const [dateTimeState, setDateTimeState] = useState({
+  //   date: dayjs(new Date('2021-03-20')).format(DATE_TIME_TYPE.DATE_FORMAT),
+  //   time: dayjs("09:10:00", DATE_TIME_TYPE.TIME_FORMAT).format(DATE_TIME_TYPE.TIME_FORMAT),
+  // });
   const [trafficState, setTrafficState] = useState({
     cameras: [],
     geoLocations: []
@@ -35,11 +41,11 @@ function Home() {
   });
 
   useEffect(() => {
-    if (dateTimeState.date && dateTimeState.time) {
+    if (![dateTimeState.date, dateTimeState.time].includes('Invalid Date')) {
       callTrafficAPI();
       callWeatherAPI();
     }
-  }, [dateTimeState.date, dateTimeState.time])
+  }, [])
 
   const callTrafficAPI = async () => {
     const TRAFFIC_IMAGES_API = `transport/traffic-images?date_time=${dayjs(`${dateTimeState.date} ${dateTimeState.time}`).format(DATE_TIME_TYPE.DATE_TIME_FORMAT)}`
@@ -47,14 +53,16 @@ function Home() {
     const cameraDetails = response.data.items[0].cameras;
     let geoLocationsList: any = []; 
 
-    cameraDetails.map((camera: any) => {
-      geoLocationsList.push(camera.location)
-    });
+    if(Boolean(cameraDetails.length)) {
+      cameraDetails.map((camera: any) => {
+        geoLocationsList.push(camera.location)
+      });
 
-    setTrafficState({
-      cameras: cameraDetails,
-      geoLocations: geoLocationsList
-    });
+      setTrafficState({
+        cameras: cameraDetails,
+        geoLocations: geoLocationsList
+      });
+    }
   }
 
   const callWeatherAPI = async () => {
@@ -69,30 +77,36 @@ function Home() {
     }
   }
 
-  const handleDateTimeChange = (value: string, fieldName: string) => {
-    setDateTimeState({
-      ...dateTimeState,
-      [fieldName] : value
-    });
+  const handleDateTimeChange = useCallback((value: string, fieldName: string) => {
+    // setDateTimeState({
+    //   ...dateTimeState,
+    //   [fieldName] : value
+    // });
+    dispatch({ type: fieldName, [fieldName]: value });
+    
+    if (value !== INVALID_DATE) {
+      callTrafficAPI();
+      callWeatherAPI();
 
-    setTrafficState({
-      cameras: [],
-      geoLocations: []
-    });
-
-    setWeatherState({
-      ...weatherState,
-      trafficImageDetails: {
-        image: ""
-      },
-      selectedLocationDetails: {
-        name: "",
-        area: "",
-        forecast: "",
-        location: { latitude: 0, longitude: 0 }
-      }
-    });
-  }
+      setTrafficState({
+        cameras: [],
+        geoLocations: []
+      });
+  
+      setWeatherState({
+        ...weatherState,
+        trafficImageDetails: {
+          image: ""
+        },
+        selectedLocationDetails: {
+          name: "",
+          area: "",
+          forecast: "",
+          location: { latitude: 0, longitude: 0 }
+        }
+      });
+    }
+  }, [dateTimeState])
 
   const handleLocationClick = (selectedLocation: locationDetails) => {
     const { geoLocations, cameras } = trafficState;
@@ -119,7 +133,7 @@ function Home() {
         <TimePicker value={time} onChange={handleDateTimeChange} />
       </section>
       
-      {(Boolean(date !== "Invalid Date") && Boolean(time)) &&
+      {(Boolean(date !== INVALID_DATE) && Boolean(time)) &&
         <>
           <section className='mb-6'>
             {Boolean(locations.length) && <ListOfLocation showValue={Boolean(name)} locations={locations} onLocationClick={handleLocationClick} /> }

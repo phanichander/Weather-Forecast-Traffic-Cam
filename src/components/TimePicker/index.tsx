@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { TimePicker as Time } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -27,4 +28,4 @@ const TimePicker = ({value, onChange } : Props) => {
   );
 };
 
-export default TimePicker;
+export default memo(TimePicker);

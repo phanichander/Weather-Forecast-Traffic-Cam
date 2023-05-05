@@ -1,8 +1,10 @@
+import { memo } from 'react';
 import { DatePicker as Date } from "antd";
 import dayjs from "dayjs";
 
 import { WeatherFields } from "../../constants/displayFields";
 import { DATE_TIME_TYPE } from "../../constants/types";
+import { INVALID_DATE } from '../../constants/displayMessage';
 
 interface Props {
   value: string;
@@ -19,8 +21,8 @@ const DatePicker = ({ value, onChange }: Props) => {
     format={DATE_TIME_TYPE.DATE_FORMAT}
     defaultValue={dayjs(value, DATE_TIME_TYPE.DATE_FORMAT)}
     onChange={handleOnChange}
-    status={value === "Invalid Date"  ? "error" : ""}
+    status={value === INVALID_DATE  ? "error" : ""}
   />
 }
 
-export default DatePicker;
+export default memo(DatePicker);

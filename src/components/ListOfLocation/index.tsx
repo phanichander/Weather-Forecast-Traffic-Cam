@@ -31,7 +31,7 @@ export const ListOfLocation = ({ showValue, locations, onLocationClick } : Props
 
   return (      
     <Select
-      value={showValue ? value : ""}
+      value={showValue ? value : SELECT_LOCATION}
       className="location-details w-full"
       allowClear
       showSearch
